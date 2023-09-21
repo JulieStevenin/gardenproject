@@ -2,6 +2,7 @@ package com.projet.gardenspringreact.restcontrollers;
 
 import com.projet.gardenspringreact.entities.User;
 import com.projet.gardenspringreact.services.UserService;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -11,7 +12,7 @@ import java.util.List;
 @RequestMapping
 public class UserController {
 
-private UserService userService;
+    private UserService userService;
 
     public UserController(UserService userService) {
         this.userService = userService;
@@ -45,5 +46,16 @@ private UserService userService;
     @PostMapping("/deleteallusers")
     public void deleteAllUsers() {
         userService.deleteAllUsers();
+    }
+
+    @PostMapping("/register")
+    @ResponseStatus(HttpStatus.CREATED)
+    public User registerUser(@RequestBody User user) {
+        return userService.registerUser(user);
+    }
+
+    @PostMapping("/login")
+    public User loginUser(@RequestParam String username, @RequestParam String password) {
+        return userService.loginUser(username, password);
     }
 }

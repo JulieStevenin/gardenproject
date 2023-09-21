@@ -37,21 +37,32 @@ public class CommentService {
         }
     }
 
-
     public void createComment(Comment comment) {
         commentRepository.save(comment);
     }
 
+    public Comment updateComment(Long commentId, Comment updatedComment) {
+        Optional<Comment> optionalComment = commentRepository.findById(commentId);
+        if (optionalComment.isPresent()) {
+            Comment comment = optionalComment.get();
+
+            comment.setText(updatedComment.getText());
+
+            return commentRepository.save(comment);
+        } else {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Le commentaire n'existe pas ");
+        }
+    }
+
     public void deleteComment(Long commentId) {
         Comment comment = commentRepository.findById(commentId)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,"Vous ne pouvez pas supprimer ce commentaire"));
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Vous ne pouvez pas supprimer ce commentaire"));
         commentRepository.delete(comment);
     }
 
     public void deleteAllComments() {
         commentRepository.deleteAll();
     }
-
 
 }
 
